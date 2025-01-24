@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 NUM_TEMP = 2.5
 SDG_07_NET_ALIGNMENT_SCORE = 2
 ITR_THRESHOLD = 2.4
+NUM_ASSETS = 20
 
 
 if __name__ == '__main__':
@@ -19,12 +20,12 @@ if __name__ == '__main__':
     # Normalisation des critères dans df_filtered
     df_filtered[criteria] = scaler.fit_transform(df_filtered[criteria])
     df_filtered['score'] = df_filtered[criteria].mean(axis=1)
-    top_20_best_in_class = df_filtered.sort_values(by='score', ascending=False).head(20)
+    top_20_best_in_class = df_filtered.sort_values(by='score', ascending=False).head(NUM_ASSETS)
     itr_average = top_20_best_in_class['ITR'].mean()
 
     while itr_average >= 2:
         eligible_assets = df_filtered[df_filtered['ITR'] < ITR_THRESHOLD]
-        new_top_20_best_in_class = eligible_assets.sort_values(by='score', ascending=False).head(20)
+        new_top_20_best_in_class = eligible_assets.sort_values(by='score', ascending=False).head(NUM_ASSETS)
         itr_average = new_top_20_best_in_class['ITR'].mean()
         if itr_average < 2:
             top_20_best_in_class = new_top_20_best_in_class
