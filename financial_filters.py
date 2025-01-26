@@ -9,10 +9,10 @@ NUM_ASSETS = 20
 
 
 if __name__ == '__main__':
-    data = pd.read_csv("all_data.csv", sep=";")
-    df_filtered = data[data['ITR'] <= NUM_TEMP]
+    data = pd.read_csv("all_data.csv", sep=";") # 1247 actifs
+    df_filtered = data[data['ITR'] <= NUM_TEMP] # 849
 
-    df_filtered = df_filtered[df_filtered['SDG_07_NET_ALIGNMENT_SCORE'] >= SDG_07_NET_ALIGNMENT_SCORE]
+    df_filtered = df_filtered[df_filtered['SDG_07_NET_ALIGNMENT_SCORE'] >= SDG_07_NET_ALIGNMENT_SCORE] # 291
 
     criteria = ['Annualized return 20Y', 'Sharpe 20Y']
     scaler = StandardScaler()
@@ -62,3 +62,13 @@ if __name__ == '__main__':
 
     final_df = top_20_best_in_class[['ticker', 'name','Annualized return 20Y','Sharpe 20Y', 'score', 'weight']]
     final_df.to_csv("fund_composition.csv", sep=";", index=False)
+
+    # Sector and region analysis
+    assets = top_20_best_in_class['ticker'].tolist()
+    sectors = data[data['ticker'].isin(assets)]['gics_sector_name'].value_counts()
+    sectors = sectors / sectors.sum()
+    sectors.to_csv("sector_analysis.csv", sep=";")
+
+    regions = data[data['ticker'].isin(assets)]['country'].value_counts()
+    regions = regions / regions.sum()
+    regions.to_csv("region_analysis.csv", sep=";")
