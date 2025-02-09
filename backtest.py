@@ -52,13 +52,13 @@ if __name__ == '__main__':
 
     portfolio_cumulative_returns = (1 + portfolio_returns).cumprod()
     index_cumulative_returns = (1 + index_returns).cumprod()
-    portfolio_annualized_returns = portfolio_cumulative_returns.resample('Y').last().pct_change().add(1)
-    index_annualized_returns = index_cumulative_returns.resample('Y').last().pct_change().add(1)
+    portfolio_annualized_returns = portfolio_cumulative_returns.resample('Y').last().pct_change()
+    index_annualized_returns = index_cumulative_returns.resample('Y').last().pct_change()
     annualized_returns_per_year = pd.concat({
         'SHPA 20 Annualized Return': portfolio_annualized_returns,
         'MSCI ACWI Low Carbon Target Annualized Return': index_annualized_returns
     }, axis=1).dropna()
 
-    annualized_returns_per_year = (annualized_returns_per_year -1) * 100
+    annualized_returns_per_year = (annualized_returns_per_year) * 100
     annualized_returns_per_year.columns = ['SHPA 20', 'MSCI ACWI Low Carbon Target']
     print(annualized_returns_per_year)
